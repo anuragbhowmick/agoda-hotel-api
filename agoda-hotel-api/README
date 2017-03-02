@@ -11,6 +11,8 @@ To run the tests
 To start the application:
     ${PROJECT_DIR}/bin/activator run
 
+Note : activator run will take some time in the first run fro downloading the dependencies. Can take 5~10 minutes
+
 The REST api is of the form
 
 /api/hotels/search/city/:cityName
