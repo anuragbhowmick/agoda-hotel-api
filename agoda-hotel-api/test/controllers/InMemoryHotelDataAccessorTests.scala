@@ -6,9 +6,7 @@ import org.scalatest.junit.AssertionsForJUnit
 import model.{Hotel, SortingType}
 
 import scala.collection.mutable
-/**
-  * Created by anurag on 3/2/17.
-  */
+
 class InMemoryHotelDataAccessorTests extends AssertionsForJUnit{
 
   var inMemoryHotelDataAccessor : InMemoryHotelDataAccessor = _
@@ -50,6 +48,5 @@ class InMemoryHotelDataAccessorTests extends AssertionsForJUnit{
     }
     ascList = ascList.sortWith(_ < _)
     assertTrue(ascList.equals(priceList2))
-
   }
 }

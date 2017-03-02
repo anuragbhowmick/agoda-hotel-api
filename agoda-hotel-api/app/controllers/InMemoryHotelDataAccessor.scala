@@ -1,42 +1,45 @@
 package controllers
 
 import java.io.FileNotFoundException
-import java.io._
 import javax.inject.Singleton
 
 import api.HotelDataAccessor
 import model.{Hotel, SortingType}
 import model.SortingType.SortingType
-import play.api.libs.json.Json
 
 /**
-  * Created by anurag on 3/1/17.
+  * Implementation of HotelDataAccessor
+  * Stores the hotel details inMemory
   */
 @Singleton
 class InMemoryHotelDataAccessor extends HotelDataAccessor {
 
-  var cityToHotel = scala.collection.mutable.Map[String, List[Hotel]]()
+  private val HOTEL_DB_FILE = "hoteldb.csv"
+  private var cityToHotel = scala.collection.mutable.Map[String, List[Hotel]]()
 
-  val init = {
+  /**
+    * Reads the csv file and populates a map of city to hotel List
+    */
+  private val init = {
     try {
-      val bufferedSource = scala.io.Source.fromFile("hoteldb.csv")
+      val bufferedSource = scala.io.Source.fromFile(HOTEL_DB_FILE)
       var count = 0
       for (line <- bufferedSource.getLines) {
-        val cols = line.split(",").map(_.trim)
-        val hotel = new Hotel(cols(0), cols(1), cols(2), cols(3).toInt)
-        cityToHotel.get(hotel.city) match {
-          case Some(xs: List[Hotel]) => {
-            cityToHotel.update(hotel.city, xs :+ hotel)
+        try {
+          val cols = line.split(",").map(_.trim)
+          val hotel = new Hotel(cols(0), cols(1), cols(2), cols(3).toInt)
+          cityToHotel.get(hotel.city) match {
+            case Some(hotelList: List[Hotel]) => cityToHotel.update(hotel.city, hotelList :+ hotel)
+            case None => cityToHotel(hotel.city) = List(hotel)
           }
-          case None => {
-            cityToHotel(hotel.city) = List(hotel)
-          }
+        } catch {
+          case ex:Exception => println("Exception in reading line " + ex)
         }
       }
       bufferedSource.close
     } catch {
-      case ex: FileNotFoundException => println("Couldn't find that file.")
-      case ex: IndexOutOfBoundsException => println("Had an IOException trying to read that file")
+      case ex: FileNotFoundException => println("Couldn't find file" + HOTEL_DB_FILE)
+      case ex: Exception => println("Exception while reading from file " + HOTEL_DB_FILE + ex)
     }
   }
 

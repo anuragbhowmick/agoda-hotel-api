@@ -1,49 +1,22 @@
-This is your new Play application
-=================================
+A RESTful API written in Scala, built on top of Play!
 
-This file will be packaged with your application when using `activator dist`.
+The API returns a list of hotels given a city. The list can be optionally returned price sorted (ASC/DESC). The Hotel DB (Name, City, Id, Price) is loaded from a csv file.
+The API requests are authorized and throttled by api-keys.
+     *   On exceeding the limit, api-key is suspended for next 5 minutes.
+     *   Api key can have different rate limit set(from configuration) and if not present there is a global rate limit applied
 
-There are several demonstration files available in this template.
+To run the tests
+    ${PROJECT_DIR}/bin/activator test
 
-Controllers
-===========
+To start the application:
+    ${PROJECT_DIR}/bin/activator run
 
-- HomeController.scala:
+The REST api is of the form
 
-  Shows how to handle simple HTTP requests.
+/api/hotels/search/city/:cityName
 
-- AsyncController.scala:
+To use the REST API:
 
-  Shows how to do asynchronous programming when handling a request.
-
-- CountController.scala:
-
-  Shows how to inject a component into a controller and use the component when
-  handling requests.
-
-Components
-==========
-
-- Module.scala:
-
-  Shows how to use Guice to bind all the components needed by your application.
-
-- Counter.scala:
-
-  An example of a component that contains state, in this case a simple counter.
-
-- ApplicationTimer.scala:
-
-  An example of a component that starts when the application starts and stops
-  when the application stops.
-
-Filters
-=======
-
-- Filters.scala:
-
-  Creates the list of HTTP filters used by your application.
-
-- ExampleFilter.scala
-
-  A simple filter that adds a header to every response.
+curl -X GET -H "x-api-key: k1" "127.0.0.1:9000/api/hotels/search/city/Amsterdam?sort=priceAsc"
+curl -X GET -H "x-api-key: k1" "127.0.0.1:9000/api/hotels/search/city/Amsterdam?sort=priceDesc"
+curl -X GET -H "x-api-key: k1" "127.0.0.1:9000/api/hotels/search/city/Amsterdam"

@@ -8,11 +8,11 @@ import model.Hotel
   */
 trait HotelDataAccessor {
   /**
-    * Hotel searches based on city name
+    * Query Hotel details based on city name
     *
     * @param city           The city for which we want the list of hotels
     * @param sortType       Optional sorting attribute. PriceAsc/PriceDesc
-    * @return               A List of found hotels or null
+    * @return               A List of found hotels(can be sorted based on the sort paramaeter) or null
     */
   def getHotelsForCity(city : String, sortType : SortingType = null) : List[Hotel]
 }
